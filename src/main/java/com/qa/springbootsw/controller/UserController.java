@@ -3,6 +3,9 @@ package com.qa.springbootsw.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,6 +20,9 @@ import com.qa.springbootsw.domain.User;
 @RequestMapping("/user") // http://localhost:9000/user/...
 public class UserController {
 
+	//200 - OK, 201 - Created, 202 - Accepted, 204 - No Content
+	//400 - Bad Request, 404 - Not Found, 500 - Internal Server Error
+	
 	// Temporary storage, until we implement a real database
 	private List<User> users = new ArrayList<>();
 	
@@ -27,17 +33,31 @@ public class UserController {
 	
 	// Create
 	@PostMapping("/create")
-	public User create(@RequestBody User user) {
+	public ResponseEntity<User> create(@RequestBody User user) {
 		this.users.add(user);
-		// Return last added User from list
-		return this.users.get(this.users.size() - 1);
+		
+		// Return Response Entity containing the user and the correct response entity
+		return new ResponseEntity<User>(this.users.get(this.users.size() - 1), HttpStatus.CREATED);
+
+//		We also have the option to add some conditional logic and return either a positive or negative status code
+		
+//		if (this.users.add(user)) {
+//			return new ResponseEntity<User>(this.users.get(this.users.size() - 1), HttpStatus.CREATED);
+//		} else {
+//			return new ResponseEntity<User>(HttpStatus.INTERNAL_SERVER_ERROR);
+// 		}
+		
+// 		The conditional above can be written using a 'ternary if' like so:		
+		
+//		return this.users.add(user) ? new ResponseEntity<User>(this.users.get(this.users.size() - 1), HttpStatus.CREATED)
+//				: new ResponseEntity<User>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 	// Read
 	@GetMapping("getAll")
-	public List<User> getAll() {
-		// return the whole list
-		return this.users;
+	public ResponseEntity<List<User>> getAll() {
+		// return a Response Entity containing the whole list
+		return new ResponseEntity<List<User>>(this.users, HttpStatus.ACCEPTED);
 	}
 	
 	// Read by ID
@@ -59,5 +79,8 @@ public class UserController {
 	}
 	
 	// Delete
-	//@DeleteMapping
+	@DeleteMapping("/delete/{id}")
+	public User delete(@PathVariable int id) {
+		return this.users.remove(id);
+	}
 }
