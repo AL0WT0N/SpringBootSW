@@ -15,29 +15,28 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.qa.springbootsw.domain.User;
+import com.qa.springbootsw.service.UserService;
+
+//200 - OK, 201 - Created, 202 - Accepted, 204 - No Content
+//400 - Bad Request, 404 - Not Found, 500 - Internal Server Error
 
 @RestController
 @RequestMapping("/user") // http://localhost:9000/user/...
 public class UserController {
 
-	//200 - OK, 201 - Created, 202 - Accepted, 204 - No Content
-	//400 - Bad Request, 404 - Not Found, 500 - Internal Server Error
+	private UserService service;
 	
-	// Temporary storage, until we implement a real database
-	private List<User> users = new ArrayList<>();
-	
-	@GetMapping("/hello") // http://localhost:9000/user/hello
-	public String helloWorld() {
-		return "Hello, World";
+	// Constructor Injection
+	public UserController(UserService service) {
+		this.service = service;
 	}
-	
+
 	// Create
 	@PostMapping("/create")
 	public ResponseEntity<User> create(@RequestBody User user) {
-		this.users.add(user);
 		
 		// Return Response Entity containing the user and the correct response entity
-		return new ResponseEntity<User>(this.users.get(this.users.size() - 1), HttpStatus.CREATED);
+		return new ResponseEntity<User>(this.service.create(user), HttpStatus.CREATED);
 
 //		We also have the option to add some conditional logic and return either a positive or negative status code
 		
@@ -54,32 +53,27 @@ public class UserController {
 	}
 	
 	// Read
-	@GetMapping("getAll")
+	@GetMapping("/getAll")
 	public ResponseEntity<List<User>> getAll() {
 		// return a Response Entity containing the whole list
-		return new ResponseEntity<List<User>>(this.users, HttpStatus.ACCEPTED);
+		return new ResponseEntity<List<User>>(this.service.getAll(), HttpStatus.OK);
 	}
 	
 	// Read by ID
 	@GetMapping("/getOne/{id}")
 	public ResponseEntity<User> getOne(@PathVariable int id) {
-		return new ResponseEntity<User>(this.users.get(id), HttpStatus.OK);
+		return new ResponseEntity<User>(this.service.getOne(id), HttpStatus.OK);
 	}
 	
 	// Update
 	@PutMapping("/update/{id}")
 	public ResponseEntity<User> update(@PathVariable int id, @RequestBody User user) {
-		// Remove original user
-		this.users.remove(id);
-		// Add updated user
-		this.users.add(id, user);
-		// Return the updated user
-		return new ResponseEntity<User>(this.users.get(id), HttpStatus.ACCEPTED);
+		return new ResponseEntity<User>(this.service.update(id, user), HttpStatus.ACCEPTED);
 	}
 	
 	// Delete
 	@DeleteMapping("/delete/{id}")
 	public ResponseEntity<User> delete(@PathVariable int id) {
-		return new ResponseEntity<User>(this.users.remove(id), HttpStatus.NO_CONTENT);
+		return new ResponseEntity<User>(this.service.delete(id), HttpStatus.NO_CONTENT);
 	}
 }
