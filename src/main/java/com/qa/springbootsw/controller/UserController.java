@@ -62,25 +62,24 @@ public class UserController {
 	
 	// Read by ID
 	@GetMapping("/getOne/{id}")
-	public User getOne(@PathVariable int id) {
-		// Don't forget - ID is index, because we're using an array, not a database
-		return this.users.get(id);
+	public ResponseEntity<User> getOne(@PathVariable int id) {
+		return new ResponseEntity<User>(this.users.get(id), HttpStatus.OK);
 	}
 	
 	// Update
 	@PutMapping("/update/{id}")
-	public User update(@PathVariable int id, @RequestBody User user) {
+	public ResponseEntity<User> update(@PathVariable int id, @RequestBody User user) {
 		// Remove original user
 		this.users.remove(id);
 		// Add updated user
 		this.users.add(id, user);
 		// Return the updated user
-		return this.users.get(id);
+		return new ResponseEntity<User>(this.users.get(id), HttpStatus.ACCEPTED);
 	}
 	
 	// Delete
 	@DeleteMapping("/delete/{id}")
-	public User delete(@PathVariable int id) {
-		return this.users.remove(id);
+	public ResponseEntity<User> delete(@PathVariable int id) {
+		return new ResponseEntity<User>(this.users.remove(id), HttpStatus.NO_CONTENT);
 	}
 }
