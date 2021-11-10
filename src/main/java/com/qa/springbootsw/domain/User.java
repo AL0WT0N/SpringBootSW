@@ -22,7 +22,7 @@ public class User {
 	private String lastName;
 	
 	// Creates column called "username"
-	@Column(unique = true, nullable = false)
+	@Column(nullable = false)
 	private String username;
 
 	// default constructor

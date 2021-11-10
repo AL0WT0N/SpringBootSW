@@ -1,6 +1,5 @@
 package com.qa.springbootsw.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -34,46 +33,31 @@ public class UserController {
 	// Create
 	@PostMapping("/create")
 	public ResponseEntity<User> create(@RequestBody User user) {
-		
-		// Return Response Entity containing the user and the correct response entity
 		return new ResponseEntity<User>(this.service.create(user), HttpStatus.CREATED);
-
-//		We also have the option to add some conditional logic and return either a positive or negative status code
-		
-//		if (this.users.add(user)) {
-//			return new ResponseEntity<User>(this.users.get(this.users.size() - 1), HttpStatus.CREATED);
-//		} else {
-//			return new ResponseEntity<User>(HttpStatus.INTERNAL_SERVER_ERROR);
-// 		}
-		
-// 		The conditional above can be written using a 'ternary if' like so:		
-		
-//		return this.users.add(user) ? new ResponseEntity<User>(this.users.get(this.users.size() - 1), HttpStatus.CREATED)
-//				: new ResponseEntity<User>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 	// Read
 	@GetMapping("/getAll")
 	public ResponseEntity<List<User>> getAll() {
-		// return a Response Entity containing the whole list
 		return new ResponseEntity<List<User>>(this.service.getAll(), HttpStatus.OK);
 	}
 	
 	// Read by ID
-	@GetMapping("/getOne/{id}")
-	public ResponseEntity<User> getOne(@PathVariable int id) {
-		return new ResponseEntity<User>(this.service.getOne(id), HttpStatus.OK);
+	@GetMapping("/getById/{id}")
+	public ResponseEntity<User> getOne(@PathVariable Long id) {
+		return new ResponseEntity<User>(this.service.getById(id), HttpStatus.OK);
 	}
 	
 	// Update
 	@PutMapping("/update/{id}")
-	public ResponseEntity<User> update(@PathVariable int id, @RequestBody User user) {
+	public ResponseEntity<User> update(@PathVariable Long id, @RequestBody User user) {
 		return new ResponseEntity<User>(this.service.update(id, user), HttpStatus.ACCEPTED);
 	}
 	
 	// Delete
 	@DeleteMapping("/delete/{id}")
-	public ResponseEntity<User> delete(@PathVariable int id) {
-		return new ResponseEntity<User>(this.service.delete(id), HttpStatus.NO_CONTENT);
+	public ResponseEntity<User> delete(@PathVariable Long id) {
+		return this.service.delete(id) ? new ResponseEntity<User>(HttpStatus.NO_CONTENT) 
+				: new ResponseEntity<User>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 }

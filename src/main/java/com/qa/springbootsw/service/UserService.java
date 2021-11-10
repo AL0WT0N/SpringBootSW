@@ -1,47 +1,47 @@
 package com.qa.springbootsw.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
 import com.qa.springbootsw.domain.User;
+import com.qa.springbootsw.repo.UserRepo;
 
 @Service
 public class UserService {
 
-	// Temporary storage, until we implement a real database
-	private List<User> users = new ArrayList<>();
+	private UserRepo repo;
+	
+	public UserService(UserRepo repo) {
+		this.repo = repo;
+	}
 	
 	// Create
 	public User create(User user) {
-		this.users.add(user);
-		return this.users.get(this.users.size() - 1);
+		return this.repo.saveAndFlush(user);
 	}
 	
 	// Read All
 	public List<User> getAll() {
-		// Return the whole list
-		return this.users;
+		return this.repo.findAll();
 	}
 	
-	// Read One
-	public User getOne(int id) {
-		return this.users.get(id);
+	// Read By Id
+	public User getById(Long id) {
+		return this.repo.findById(id).get();
 	}
 	
 	// Update
-    public User update(int id, User user) {
-    	// Remove original user
-		this.users.remove(id);
-		// Add updated user
-		this.users.add(id, user);
-		// Return the updated user
-		return this.users.get(id);
+    public User update(Long id, User user) {
+    	User existing = this.repo.findById(id).get();
+    	existing.setFirstName(user.getFirstName());
+    	existing.setLastName(user.getLastName());
+    	existing.setUsername(user.getUsername());
+    	return this.repo.saveAndFlush(existing);
     }
 
-    public User delete(int id) {
-        // Remove User and return it
-        return this.users.remove(id);
+    public boolean delete(Long id) {
+        this.repo.deleteById(id);
+        return !this.repo.existsById(id);
     }
 }
