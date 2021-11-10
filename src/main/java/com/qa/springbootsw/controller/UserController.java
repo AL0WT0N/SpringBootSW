@@ -48,6 +48,12 @@ public class UserController {
 		return new ResponseEntity<User>(this.service.getById(id), HttpStatus.OK);
 	}
 	
+	// Custom Query - Get by username
+	@GetMapping("/getByUsername/{username}")
+	public ResponseEntity<User> getByUsername(@PathVariable String username) {
+		return new ResponseEntity<User>(this.service.getByUsername(username), HttpStatus.OK);
+	}
+	
 	// Update
 	@PutMapping("/update/{id}")
 	public ResponseEntity<User> update(@PathVariable Long id, @RequestBody User user) {

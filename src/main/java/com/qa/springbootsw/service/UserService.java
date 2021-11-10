@@ -31,6 +31,11 @@ public class UserService {
 		return this.repo.findById(id).get();
 	}
 	
+	// Custom Query - Find by username
+	public User getByUsername(String username) {
+		return this.repo.findByUsername(username).get();
+	}
+	
 	// Update
     public User update(Long id, User user) {
     	User existing = this.repo.findById(id).get();
