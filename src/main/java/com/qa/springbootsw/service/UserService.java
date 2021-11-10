@@ -1,10 +1,9 @@
 package com.qa.springbootsw.service;
 
 import java.util.List;
-
 import org.springframework.stereotype.Service;
-
 import com.qa.springbootsw.domain.User;
+import com.qa.springbootsw.exceptions.UserNotFoundException;
 import com.qa.springbootsw.repo.UserRepo;
 
 @Service
@@ -28,7 +27,7 @@ public class UserService {
 	
 	// Read By Id
 	public User getById(Long id) {
-		return this.repo.findById(id).get();
+		return this.repo.findById(id).orElseThrow(UserNotFoundException::new);
 	}
 	
 	// Custom Query - Find by username
