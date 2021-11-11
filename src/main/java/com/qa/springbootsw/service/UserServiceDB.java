@@ -2,12 +2,14 @@ package com.qa.springbootsw.service;
 
 import java.util.List;
 
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import com.qa.springbootsw.domain.User;
 import com.qa.springbootsw.exceptions.UserNotFoundException;
 import com.qa.springbootsw.repo.UserRepo;
 
+@Primary
 @Service
 public class UserServiceDB implements UserService {
 

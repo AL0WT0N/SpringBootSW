@@ -3,12 +3,10 @@ package com.qa.springbootsw.service;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import com.qa.springbootsw.domain.User;
 
-@Primary
 @Service
 public class UserServiceList implements UserService {
 
