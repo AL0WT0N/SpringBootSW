@@ -24,9 +24,9 @@ import com.qa.springbootsw.service.UserService;
 public class UserController {
 
 	private UserService service;
-	
-	// Constructor Injection
+
 	public UserController(UserService service) {
+		super();
 		this.service = service;
 	}
 
@@ -35,35 +35,35 @@ public class UserController {
 	public ResponseEntity<User> create(@RequestBody User user) {
 		return new ResponseEntity<User>(this.service.create(user), HttpStatus.CREATED);
 	}
-	
+
 	// Read
 	@GetMapping("/getAll")
 	public ResponseEntity<List<User>> getAll() {
 		return new ResponseEntity<List<User>>(this.service.getAll(), HttpStatus.OK);
 	}
-	
+
 	// Read by ID
 	@GetMapping("/getById/{id}")
 	public ResponseEntity<User> getOne(@PathVariable Long id) {
 		return new ResponseEntity<User>(this.service.getById(id), HttpStatus.OK);
 	}
-	
+
 	// Custom Query - Get by username
 	@GetMapping("/getByUsername/{username}")
 	public ResponseEntity<User> getByUsername(@PathVariable String username) {
 		return new ResponseEntity<User>(this.service.getByUsername(username), HttpStatus.OK);
 	}
-	
+
 	// Update
 	@PutMapping("/update/{id}")
 	public ResponseEntity<User> update(@PathVariable Long id, @RequestBody User user) {
 		return new ResponseEntity<User>(this.service.update(id, user), HttpStatus.ACCEPTED);
 	}
-	
+
 	// Delete
 	@DeleteMapping("/delete/{id}")
 	public ResponseEntity<User> delete(@PathVariable Long id) {
-		return this.service.delete(id) ? new ResponseEntity<User>(HttpStatus.NO_CONTENT) 
+		return this.service.delete(id) ? new ResponseEntity<User>(HttpStatus.NO_CONTENT)
 				: new ResponseEntity<User>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 }
