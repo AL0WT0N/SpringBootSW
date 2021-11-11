@@ -1,8 +1,13 @@
 package com.qa.springbootsw.rest;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,6 +73,67 @@ public class UserControllerIntegrationTest {
 
 		this.mvc.perform(request).andExpect(checkStatus).andExpect(checkBody);
 
+	}
+
+	@Test
+	void testGet() throws Exception {
+		User jb = new User(1, "jordan", "benbelaid", "jbizzle");
+		String jbAsJSON = this.mapper.writeValueAsString(jb);
+		RequestBuilder request = get("/user/getById/1");
+
+		ResultMatcher checkStatus = status().isOk();
+
+		ResultMatcher checkBody = content().json(jbAsJSON);
+
+		this.mvc.perform(request).andExpect(checkStatus).andExpect(checkBody);
+	}
+
+	@Test
+	void testGetAll() throws Exception {
+		User jb = new User(1, "jordan", "benbelaid", "jbizzle");
+		String usersJSON = this.mapper.writeValueAsString(List.of(jb));
+		RequestBuilder request = get("/user/getAll");
+
+		ResultMatcher checkStatus = status().isOk();
+
+		ResultMatcher checkBody = content().json(usersJSON);
+
+		this.mvc.perform(request).andExpect(checkStatus).andExpect(checkBody);
+	}
+
+	@Test
+	void testGetByUsername() throws Exception {
+		User jb = new User(1, "jordan", "benbelaid", "jbizzle");
+		String jbAsJSON = this.mapper.writeValueAsString(jb);
+		RequestBuilder request = get("/user/getByUsername/" + jb.getUsername());
+
+		ResultMatcher checkStatus = status().isOk();
+
+		ResultMatcher checkBody = content().json(jbAsJSON);
+
+		this.mvc.perform(request).andExpect(checkStatus).andExpect(checkBody);
+	}
+
+	@Test
+	void testUpdate() throws Exception {
+		User me = new User("Jordan", "Harrison", "JHarry");
+		String meAsJSON = this.mapper.writeValueAsString(me);
+		RequestBuilder request = put("/user/update/1").contentType(MediaType.APPLICATION_JSON).content(meAsJSON);
+
+		ResultMatcher checkStatus = status().isAccepted(); // matcher that we will use to test the response
+
+		User meSaved = new User(1, "Jordan", "Harrison", "JHarry");
+		String meSavedAsJSON = this.mapper.writeValueAsString(meSaved);
+
+		ResultMatcher checkBody = content().json(meSavedAsJSON);
+
+		this.mvc.perform(request).andExpect(checkStatus).andExpect(checkBody);
+
+	}
+
+	@Test
+	void testDelete() throws Exception {
+		this.mvc.perform(delete("/user/delete/1")).andExpect(status().isNoContent());
 	}
 
 }
