@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.qa.springbootsw.AppointmentWithUsernameDTO;
 import com.qa.springbootsw.domain.Appointment;
+import com.qa.springbootsw.dto.AppointmentWithUsernameDTO;
 import com.qa.springbootsw.service.AppointmentService;
 
 @RestController

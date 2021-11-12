@@ -4,8 +4,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 import javax.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
-import com.qa.springbootsw.AppointmentWithUsernameDTO;
+
 import com.qa.springbootsw.domain.Appointment;
+import com.qa.springbootsw.dto.AppointmentWithUsernameDTO;
 import com.qa.springbootsw.repo.AppointmentRepo;
 
 @Service

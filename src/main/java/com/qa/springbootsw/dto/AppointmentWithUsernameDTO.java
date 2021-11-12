@@ -1,4 +1,4 @@
-package com.qa.springbootsw;
+package com.qa.springbootsw.dto;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
